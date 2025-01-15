@@ -15,8 +15,8 @@ Under review with Nature Scientific Data. DOI forthcoming.
 
 To be able to run all figure generating scripts successfully, the data records provided with this publications need to be downloaded and placed into the `Data` folder. There is already a dummy folder structure put in place to guide where the downloaded files need to be placed. The data package can be downloaded at the following link. Please make sure that this dataset DOI is used in case you reuse parts of these data:
 
-“Long-term pan-Canadian phosphorus mass budget dataset (g)TREND-P-CanadaCANADA: Consistent, unified county-scale and gridded data products from 1961 to 2021”<br>
-by Lamisa Malik<sup>1</sup>, Juliane Mai<sup>2</sup>, Danyka K. Byrnes<sup>1</sup>, Kimberly J. Van Meter<sup>3,4</sup>, Shuyu Chang<sup>3</sup>, Meghan McLeod<sup>5</sup>, Nandita B. Basu<sup>1,2</sup>
+**“Long-term pan-Canadian phosphorus mass budget dataset (g)TREND-P-CanadaCANADA: Consistent, unified county-scale and gridded data products from 1961 to 2021” (dataset)**<br>
+_by Lamisa Malik<sup>1</sup>, Juliane Mai<sup>2</sup>, Danyka K. Byrnes<sup>1</sup>, Kimberly J. Van Meter<sup>3,4</sup>, Shuyu Chang<sup>3</sup>, Meghan McLeod<sup>5</sup>, Nandita B. Basu<sup>1,2</sup>_
 
 Figshare DOI and link forthcoming.
 
