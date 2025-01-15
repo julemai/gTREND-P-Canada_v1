@@ -2,8 +2,8 @@
 
 This provides the scripts to generate the figures of the following publication:
 
-“Long-term pan-Canadian phosphorus mass budget dataset (g)TREND-P-CanadaCANADA: Consistent, unified county-scale and gridded data products from 1961 to 2021”<br>
-by Lamisa Malik<sup>1</sup>, Juliane Mai<sup>2</sup>, Danyka K. Byrnes<sup>1</sup>, Kimberly J. Van Meter<sup>3,4</sup>, Shuyu Chang<sup>3</sup>, Meghan McLeod<sup>5</sup>, Nandita B. Basu<sup>1,2</sup>
+**“Long-term pan-Canadian phosphorus mass budget dataset (g)TREND-P-CanadaCANADA: Consistent, unified county-scale and gridded data products from 1961 to 2021”**<br>
+_by Lamisa Malik<sup>1</sup>, Juliane Mai<sup>2</sup>, Danyka K. Byrnes<sup>1</sup>, Kimberly J. Van Meter<sup>3,4</sup>, Shuyu Chang<sup>3</sup>, Meghan McLeod<sup>5</sup>, Nandita B. Basu<sup>1,2</sup>_
 
 <sup>1</sup> Department of Civil and Environmental Engineering, University of Waterloo, Waterloo, ON, Canada <br>
 <sup>2</sup> Department of Earth and Environmental Science, University of Waterloo, Waterloo, ON, Canada <br>
