@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     import numpy as np
 
-    data_folder = "../../Figure_3/"
+    data_folder = "../Data/Figure_3/"
     
     census_years = np.arange(1961, 2022, 5)
     

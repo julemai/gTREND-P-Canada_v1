@@ -141,7 +141,7 @@ t1 = time.time()
 def log_base(x,b):
     return np.log10(x)/np.log10(b)
 
-catchfile_shp_ca = [ os.path.join('..','..', 'county_shapefiles', str(year), str(year)) for year in years ]
+catchfile_shp_ca = [ os.path.join('..','Data', 'county_shapefiles', str(year), str(year)) for year in years ]
 
 # -------------------------
 # (a) Outline of CA counties
@@ -188,7 +188,7 @@ val_components = {}
 minmax_components = {}
 for icomponent,component in enumerate(components):
 
-    filename = os.path.join('..', '..', 'County_TREND-P-Canada', 'P_'+components_lamisa[icomponent]+'.csv')
+    filename = os.path.join('..', 'Data', 'County_TREND-P-Canada', 'P_'+components_lamisa[icomponent]+'.csv')
 
     minval = 9999.
     maxval = -9999.
@@ -254,12 +254,12 @@ mwidth      = 0.0         # marker edge width
 mcol1       = '0.7'       # primary marker colour
 mcol2       = '0.0'       # secondary
 mcol3       = '0.0'       # third
-mcols       = color.colours(['blue','green','yellow','orange','red','darkgray','darkblue','black','darkgreen','gray'])
-lcol0       = color.colours('black')    # line colour
-lcol1       = color.colours('blue')     # line colour
-lcol2       = color.colours('red')    # line colour
-lcol3       = color.colours('darkgreen')   # line colour
-lcols       = color.colours(['darkgray','gray','blue'])
+#mcols       = color.colours(['blue','green','yellow','orange','red','darkgray','darkblue','black','darkgreen','gray'])
+#lcol0       = color.colours('black')    # line colour
+#lcol1       = color.colours('blue')     # line colour
+#lcol2       = color.colours('red')    # line colour
+#lcol3       = color.colours('darkgreen')   # line colour
+#lcols       = color.colours(['darkgray','gray','blue'])
 markers     = ['o','v','s','^']
 
 # Legend

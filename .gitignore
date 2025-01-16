@@ -4,6 +4,12 @@
 Codes/*.R
 Codes/old_versions
 
+# Data
+Data/County_shapefiles/[1-2]*
+Data/County_TREND-P-Canada/*.csv
+Data/Figure_3/*.csv
+Data/Figure_5/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

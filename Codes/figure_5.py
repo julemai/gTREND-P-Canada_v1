@@ -78,8 +78,8 @@ if __name__ == '__main__':
     # define some variables
     # -----------------------------------------------------
 
-    data_folder_TREND  = "../../County_TREND-P-Canada/"
-    data_folder_gTREND = "../../Figure_5/"  # contains gridded data reaggregated to county scale
+    data_folder_TREND  = "../Data/County_TREND-P-Canada/"
+    data_folder_gTREND = "../Data/Figure_5/"  # contains gridded data reaggregated to county scale
     
     census_years = np.arange(1961, 2022, 5)
 
