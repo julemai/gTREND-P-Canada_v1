@@ -132,9 +132,6 @@ if __name__ == '__main__':
         # select only relevant years
         tmp = tmp.loc[ [ ii for ii in census_years ] ]
 
-        # make crop removal positive
-        tmp['crop'] = tmp['crop'] * -1.0
-
         data['TREND'][province] = tmp.copy(deep=True)
 
     # ------------------------

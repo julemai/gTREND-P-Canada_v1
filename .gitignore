@@ -10,6 +10,8 @@ Codes/.RData
 Codes/.Rhistory
 
 # Data
+Data/*/.RData
+Data/*/.Rhistory
 Data/County_shapefiles/[1-2]*
 Data/County_TREND-P-Canada/*.csv
 Data/Gridded_gTREND-P-Canada/Crop_and_Pasture_P_Removal
