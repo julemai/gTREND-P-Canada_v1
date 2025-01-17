@@ -1,6 +1,6 @@
 Place all files found in the Data Package in the folder with foldername "Figure_4" in here.
 
-(A) The county-scale TREND-P-Canada data aggregtaed to provincial-scale but not accounting for pasture P removal but only crop P removal: 
+(A) The county-scale TREND-P-Canada data aggregated to provincial-scale but not accounting for pasture P removal but only crop P removal: 
 * AB_Kton_no-pasture-removal.csv
 * BC_Kton_no-pasture-removal.csv
 * MB_Kton_no-pasture-removal.csv
