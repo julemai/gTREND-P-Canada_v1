@@ -12,10 +12,17 @@ Codes/.Rhistory
 # Data
 Data/County_shapefiles/[1-2]*
 Data/County_TREND-P-Canada/*.csv
+Data/Gridded_gTREND-P-Canada/Crop_and_Pasture_P_Removal
+Data/Gridded_gTREND-P-Canada/Domestic_Waste_P
+Data/Gridded_gTREND-P-Canada/Fertilizer_P
+Data/Gridded_gTREND-P-Canada/Livestock_Manure_P
+Data/Gridded_gTREND-P-Canada/P_Surplus
 Data/Figure_3/*.csv
 Data/Figure_4/*.xlsx
 Data/Figure_4/*.csv
 Data/Figure_5/*.csv
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
