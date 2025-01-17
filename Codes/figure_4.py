@@ -95,10 +95,11 @@ if __name__ == '__main__':
                  'MB': 'Manitoba',
                  'SK': 'Saskatchewan',
                  'AB': 'Alberta',
-                 #'NS': 'Nova Scotia',              # not available in Wang
-                 #'NB': 'New Brunswick',            # not available in Wang
-                 #'PE': 'Prince Edward Island',     # not available in Wang
-                 #'NL': 'Newfoundland & Labrador',  # not available in Wang
+                 #'AP': 'Atlantic Provinces' # = NS+NB+PE+NL
+                 #'NS': 'Nova Scotia',              # only availabe as AP in Wang and IPNI
+                 #'NB': 'New Brunswick',            # only availabe as AP in Wang and IPNI
+                 #'PE': 'Prince Edward Island',     # only availabe as AP in Wang and IPNI
+                 #'NL': 'Newfoundland & Labrador',  # only availabe as AP in Wang and IPNI
                  }
 
     components = { 'fert':    {'name': 'Fertilizer P',        'color': (203/256.,201/256.,226/256.)},
@@ -125,10 +126,21 @@ if __name__ == '__main__':
     # ------------------------
     for province in provinces:
 
-        filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,province)
-        tmp = pd.read_csv(filename)
-        tmp = tmp.set_index('year')
-
+        if province != 'AP':
+            filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,province)
+            tmp = pd.read_csv(filename)
+            tmp = tmp.set_index('year')
+        else:
+            xprovinces = ['NS', 'NB', 'PE', 'NL']
+            for ixprovince,xprovince in enumerate(xprovinces):
+                filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,xprovince)
+                itmp = pd.read_csv(filename)
+                itmp = itmp.set_index('year')
+                if ixprovince == 0:
+                    tmp = itmp
+                else:
+                    tmp += itmp
+                
         # select only relevant years
         tmp = tmp.loc[ [ ii for ii in census_years ] ]
 
@@ -409,14 +421,10 @@ if __name__ == '__main__':
                              markersize=3.0, markeredgewidth=0.0)
 
             # correlation coefficient
-            r2 = np.ma.corrcoef(np.ma.masked_invalid(xvals_all),np.ma.masked_invalid(yvals_all))[0,1]
-            # coefficient of determination R2
             idx = (~np.isnan(xvals_all) & ~np.isnan(yvals_all) )
+            r = np.ma.corrcoef(np.ma.masked_invalid(xvals_all),np.ma.masked_invalid(yvals_all))[0,1]
             if np.any(idx):
-                slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(np.array(xvals_all)[idx],np.array(yvals_all)[idx])
-                R2 = r_value**2
-            if np.any(idx):
-                sub.text(0.95,0.05,"{} = {:3.2f}".format("R$^2$",R2),
+                sub.text(0.95,0.05,"{} = {:3.2f}".format("r",r),
                              verticalalignment='bottom',horizontalalignment='right',rotation=0,
                              fontsize=textsize,
                              transform=sub.transAxes)
@@ -464,14 +472,6 @@ if __name__ == '__main__':
             else:
                 sub.set_xticks([])
                 sub.set_yticks([])
-
-            # # set limits
-            # if component == 'surplus':
-            #     sub.set_xlim([-50,100])
-            #     sub.set_ylim([-50,100])
-            # else:
-            #     sub.set_xlim([0,200])
-            #     sub.set_ylim([0,200])
 
             sub.set_xlim([minval*0.98,maxval*1.02])
             sub.set_ylim([minval*0.98,maxval*1.02])

@@ -34,6 +34,14 @@
 # run figure_5.py -g ../Figures/figure_5
 
 if __name__ == '__main__':
+
+    # -----------------------
+    # add subolder scripts/lib to search path
+    # -----------------------
+    import sys
+    import os
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(dir_path+'/lib')
     
     import argparse
     import numpy as np
@@ -74,6 +82,8 @@ if __name__ == '__main__':
     import pandas as pd
     import time
     import scipy
+
+    from position      import position      # in lib/
 
     # -----------------------------------------------------
     # define some variables
@@ -119,12 +129,12 @@ if __name__ == '__main__':
     # -----------------------------------------------------
 
     # Main plot
-    nrow        = 4           # # of rows of subplots per figure
-    ncol        = 3           # # of columns of subplots per figure
-    hspace      = -0.1         # x-space between subplots
-    vspace      = 0.01        # y-space between subplots
+    nrow        = 7           # # of rows of subplots per figure
+    ncol        = 5           # # of columns of subplots per figure
+    hspace      = 0.04         # x-space between subplots
+    vspace      = 0.04        # y-space between subplots
     right       = 0.9         # right space on page
-    textsize    = 10           # standard text size
+    textsize    = 6          # standard text size
     dxabc       = 1.0         # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
     # dyabc       = -13       # % of (max-min) shift up from lower x-axis for a,b,c,... labels
     dyabc       = 0.0         # % of (max-min) shift up from lower x-axis for a,b,c,... labels
@@ -259,8 +269,7 @@ if __name__ == '__main__':
         iplot += 1
 
         #     [left, bottom, width, height]
-        # pos = position(nrow,ncol,iplot,hspace=hspace,vspace=vspace)
-        pos = [0.35*(icomponent%3), 0.6-0.22*(icomponent//3), 0.25, 0.17]
+        pos = position(nrow,ncol,iplot,hspace=hspace,vspace=vspace)
         
         sub = fig.add_axes(pos,frameon=True) #, axisbg='none')
 
@@ -283,21 +292,11 @@ if __name__ == '__main__':
                              linestyle='None',
                              alpha=0.3,
                              marker='o', markeredgecolor='0.1', markerfacecolor='k', 
-                             markersize=5.0, markeredgewidth=0.0)
+                             markersize=3.0, markeredgewidth=0.0)
 
         # correlation coefficient
-        r2 = np.ma.corrcoef(np.ma.masked_invalid(xy[:,0]),np.ma.masked_invalid(xy[:,1]))[0,1]
-        # coefficient of determination R2
-        idx = ( ~np.isnan(xy[:,0]) & ~np.isnan(xy[:,1]) )
-        slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(xy[idx,0],xy[idx,1])
-        R2 = r_value**2
-        if R2 > 0.99:
-            sub.text(0.95,0.05,"{} > {:3.2f}".format("R$^2$",0.99),
-                         verticalalignment='bottom',horizontalalignment='right',rotation=0,
-                         fontsize=textsize,
-                         transform=sub.transAxes)
-        else:
-            sub.text(0.95,0.05,"{} = {:3.2f}".format("R$^2$",R2),
+        r = np.ma.corrcoef(np.ma.masked_invalid(xy[:,0]),np.ma.masked_invalid(xy[:,1]))[0,1]
+        sub.text(0.95,0.05,"{} = {:3.2f}".format("r",r),
                          verticalalignment='bottom',horizontalalignment='right',rotation=0,
                          fontsize=textsize,
                          transform=sub.transAxes)
@@ -309,24 +308,24 @@ if __name__ == '__main__':
                          fontweight='bold',
                          fontsize=textsize+2,
                          transform=sub.transAxes)
-        sub.text(0.05,0.95,"{}".format(components[component].replace('P Removal','P\nRemoval')),
+        sub.text(0.05,0.95,"{}".format(components[component].replace('P Removal','P\nRemoval').replace('Livestock Manure','Livestock\nManure').replace('and Pasture','and\nPasture').replace('Domestic Waste','Domestic\nWaste')),
                          verticalalignment='top',horizontalalignment='left',rotation=0,
                          fontsize=textsize,
                          transform=sub.transAxes)
 
         # Add x-title
-        if iplot == 5:
-            sub.text(0.5,-0.2,"TREND-P-Canada [{}]".format(unit),
+        if iplot == 3:
+            sub.text(0.5,-0.25,"TREND-P-Canada [{}]".format(unit),
                          verticalalignment='top',horizontalalignment='center',rotation=0,
                          fontsize=textsize,
                          transform=sub.transAxes)
             
         # Add y-title
-        if iplot == 4:
-            sub.text(-0.3,1.2,"gTREND-P-Canada [{}]".format(unit),
+        if iplot == 1:
+            sub.text(-0.35,0.5,"gTREND-P-Canada\n[{}]".format(unit),
                          rotation=90,
                          fontsize=textsize,
-                         verticalalignment='center',horizontalalignment='left',
+                         verticalalignment='center',horizontalalignment='center',
                          transform=sub.transAxes)
 
 
