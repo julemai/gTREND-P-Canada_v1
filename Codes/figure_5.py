@@ -73,6 +73,7 @@ if __name__ == '__main__':
     import numpy as np
     import pandas as pd
     import time
+    import scipy
 
     # -----------------------------------------------------
     # define some variables
@@ -286,13 +287,17 @@ if __name__ == '__main__':
 
         # correlation coefficient
         r2 = np.ma.corrcoef(np.ma.masked_invalid(xy[:,0]),np.ma.masked_invalid(xy[:,1]))[0,1]
-        if r2 > 0.99:
+        # coefficient of determination R2
+        idx = ( ~np.isnan(xy[:,0]) & ~np.isnan(xy[:,1]) )
+        slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(xy[idx,0],xy[idx,1])
+        R2 = r_value**2
+        if R2 > 0.99:
             sub.text(0.95,0.05,"{} > {:3.2f}".format("R$^2$",0.99),
                          verticalalignment='bottom',horizontalalignment='right',rotation=0,
                          fontsize=textsize,
                          transform=sub.transAxes)
         else:
-            sub.text(0.95,0.05,"{} = {:3.2f}".format("R$^2$",r2),
+            sub.text(0.95,0.05,"{} = {:3.2f}".format("R$^2$",R2),
                          verticalalignment='bottom',horizontalalignment='right',rotation=0,
                          fontsize=textsize,
                          transform=sub.transAxes)

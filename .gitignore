@@ -1,13 +1,20 @@
 **.DS_Store
 
+# Figures
+Figures/figure_*_*.png
+
 # Codes
 Codes/*.R
 Codes/old_versions
+Codes/.RData
+Codes/.Rhistory
 
 # Data
 Data/County_shapefiles/[1-2]*
 Data/County_TREND-P-Canada/*.csv
 Data/Figure_3/*.csv
+Data/Figure_4/*.xlsx
+Data/Figure_4/*.csv
 Data/Figure_5/*.csv
 
 # Byte-compiled / optimized / DLL files
