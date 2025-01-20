@@ -86,8 +86,8 @@ if __name__ == '__main__':
 
     import numpy as np
 
-    data_folder = "../Data/Figure_4/"
-    data_folder2 = "../Data/Figure_3/"
+    data_folder_fig4 = "../Data/Figure_4/"
+    data_folder_fig3 = "../Data/Figure_3/"
     
     census_years = np.arange(1961, 2019, 5)  # Wang goes until 2018
     
@@ -104,16 +104,14 @@ if __name__ == '__main__':
                  #'NL': 'Newfoundland & Labrador',  # only availabe as AP in Wang and IPNI
                  }
 
-    components = { 'fert':    {'name': 'Fertilizer P',        'color': (203/256.,201/256.,226/256.)},
-                   'man':     {'name': 'Livestock Manure P',  'color': (253/256.,190/256.,133/256.)},
-                   'crop':    {'name': 'Crop and Pasture P Removal',      'color': (186/256.,228/256.,179/256.)},
-                   #'waste':   {'name': 'Domestic Waste P',    'color': (204/256.,204/256.,204/256.)},
-                   #'surplus': {'name': 'P Surplus',           'color': 'k'},
-                   'ag-surplus': {'name': 'Agricultural P Surplus',           'color': 'k'},
+    components = { 'fert':       {'name': 'Fertilizer P',               'color': (203/256.,201/256.,226/256.)},
+                   'man':        {'name': 'Livestock Manure P',         'color': (253/256.,190/256.,133/256.)},
+                   'crop':       {'name': 'Crop and Pasture P Removal', 'color': (186/256.,228/256.,179/256.)},
+                   'ag-surplus': {'name': 'Agricultural P Surplus',     'color': 'k'},
                  }
 
-    sources = { 'WANG': { 'filename': data_folder+'IPNI_data.xlsx', 'title': 'Wang et al. (2022)'},
-                'IPNI': { 'filename': data_folder+'IPNI_data.xlsx', 'title': 'IPNI (2014)'},
+    sources = { 'WANG': { 'filename': data_folder_fig4+'Wang_Paper_data.xlsx', 'title': 'Wang et al. (2022)'},
+                'IPNI': { 'filename': data_folder_fig4+'IPNI_data.xlsx', 'title': 'IPNI (2014)'},
               }
 
     unit = "[ 1,000 metric tons-P yr$^{-1}$ ]"
@@ -130,16 +128,14 @@ if __name__ == '__main__':
     for province in provinces:
 
         if province != 'AP':
-            filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,province)
-            filename = "{}/{}_Kton.csv".format(data_folder2,province)
+            filename = "{}/{}_Kton.csv".format(data_folder_fig3,province)
             
             tmp = pd.read_csv(filename)
             tmp = tmp.set_index('year')
         else:
             xprovinces = ['NS', 'NB', 'PE', 'NL']
             for ixprovince,xprovince in enumerate(xprovinces):
-                filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,xprovince)
-                filename = "{}/{}_Kton.csv".format(data_folder2,xprovince)
+                filename = "{}/{}_Kton.csv".format(data_folder_fig3,xprovince)
                 itmp = pd.read_csv(filename)
                 itmp = itmp.set_index('year')
                 if ixprovince == 0:
@@ -160,7 +156,7 @@ if __name__ == '__main__':
     # ------------------------
     for province in provinces:
 
-        filename = "{}/Wang_Paper_data.xlsx".format(data_folder)
+        filename = "{}".format(sources['WANG']['filename'])
         tmp = pd.read_excel(open(filename, 'rb'), sheet_name=province)
         tmp = tmp.rename(columns={'Year': 'year'})
         tmp = tmp.set_index('year')
@@ -205,7 +201,7 @@ if __name__ == '__main__':
         tmp_master[col].values[:] = np.nan
 
     # get all sheet names
-    filename = "{}/IPNI_data.xlsx".format(data_folder)
+    filename = "{}".format(sources['IPNI']['filename'])
     avail_components = pd.ExcelFile(filename).sheet_names
     avail_provinces = pd.read_excel(open(filename, 'rb'), sheet_name=avail_components[0]).rename(columns={'Year': 'year'}).set_index('year').columns
 
@@ -218,7 +214,7 @@ if __name__ == '__main__':
 
                 if component in avail_components:
 
-                    filename = "{}/IPNI_data.xlsx".format(data_folder)
+                    filename = "{}".format(sources['IPNI']['filename'])
                     tmp = pd.read_excel(open(filename, 'rb'), sheet_name=component)
                     tmp = tmp.rename(columns={'Year': 'year'})
                     tmp = tmp.set_index('year')
@@ -395,7 +391,7 @@ if __name__ == '__main__':
 
             #     [left, bottom, width, height]
             pos = position(nrow,ncol,iplot,hspace=hspace,vspace=vspace)
-            print("pos: {}".format(pos))
+            #print("pos: {}".format(pos))
         
             sub = fig.add_axes(pos,frameon=True) #, axisbg='none')
 
@@ -450,25 +446,9 @@ if __name__ == '__main__':
                             markersize=3.0, markeredgewidth=0.0,
                             zorder=50)
 
-                    # # new data
-                    # xvals  = np.array(data['TREND'][province][component].values)
-                    # yvals  = np.array(data[source][province][component].values)
-
-                    # xvals  = np.array([ data['TREND'][province][component].loc[yy] for yy in range(2011,2017,5) ])
-                    # yvals  = np.array([ data[source][province][component].loc[yy] for yy in range(2011,2017,5) ])
-
-                    # xvals_all += list(xvals)
-                    # yvals_all += list(yvals)
-
-                    # sub.plot(xvals, yvals,
-                    #              linestyle='None',
-                    #              alpha=0.3,
-                    #              marker='o', markeredgecolor='0.1', markerfacecolor='red', 
-                    #              markersize=3.0, markeredgewidth=0.0)
-
-                print('    {}: [{:5.2f},{:5.2f}]'.format(component,
-                                               np.nanmin([np.nanmin(xvals_all),np.nanmin(yvals_all)]),
-                                               np.nanmax([np.nanmax(xvals_all),np.nanmax(yvals_all)])))
+                # print('    {}: [{:5.2f},{:5.2f}]'.format(component,
+                #                                np.nanmin([np.nanmin(xvals_all),np.nanmin(yvals_all)]),
+                #                                np.nanmax([np.nanmax(xvals_all),np.nanmax(yvals_all)])))
 
             # correlation coefficient
             idx = (~np.isnan(xvals_all) & ~np.isnan(yvals_all) )
