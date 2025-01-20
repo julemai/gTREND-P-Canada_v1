@@ -95,7 +95,7 @@ if __name__ == '__main__':
                  'MB': 'Manitoba',
                  'SK': 'Saskatchewan',
                  'AB': 'Alberta',
-                 #'AP': 'Atlantic Provinces' # = NS+NB+PE+NL
+                 'AP': 'Atlantic Provinces' # = NS+NB+PE+NL
                  #'NS': 'Nova Scotia',              # only availabe as AP in Wang and IPNI
                  #'NB': 'New Brunswick',            # only availabe as AP in Wang and IPNI
                  #'PE': 'Prince Edward Island',     # only availabe as AP in Wang and IPNI
