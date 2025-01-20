@@ -50,6 +50,7 @@ if __name__ == '__main__':
     import scipy
     
     from position      import position      # in lib/
+    import color                            # in lib/
 
     pngbase   = ''
     pdffile   = ''
@@ -86,6 +87,7 @@ if __name__ == '__main__':
     import numpy as np
 
     data_folder = "../Data/Figure_4/"
+    data_folder2 = "../Data/Figure_3/"
     
     census_years = np.arange(1961, 2019, 5)  # Wang goes until 2018
     
@@ -104,9 +106,10 @@ if __name__ == '__main__':
 
     components = { 'fert':    {'name': 'Fertilizer P',        'color': (203/256.,201/256.,226/256.)},
                    'man':     {'name': 'Livestock Manure P',  'color': (253/256.,190/256.,133/256.)},
-                   'crop':    {'name': 'Crop P Removal',      'color': (186/256.,228/256.,179/256.)},
-                   'waste':   {'name': 'Domestic Waste P',    'color': (204/256.,204/256.,204/256.)},
-                   'surplus': {'name': 'P Surplus',           'color': 'k'},
+                   'crop':    {'name': 'Crop and Pasture P Removal',      'color': (186/256.,228/256.,179/256.)},
+                   #'waste':   {'name': 'Domestic Waste P',    'color': (204/256.,204/256.,204/256.)},
+                   #'surplus': {'name': 'P Surplus',           'color': 'k'},
+                   'ag-surplus': {'name': 'Agricultural P Surplus',           'color': 'k'},
                  }
 
     sources = { 'WANG': { 'filename': data_folder+'IPNI_data.xlsx', 'title': 'Wang et al. (2022)'},
@@ -128,12 +131,15 @@ if __name__ == '__main__':
 
         if province != 'AP':
             filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,province)
+            filename = "{}/{}_Kton.csv".format(data_folder2,province)
+            
             tmp = pd.read_csv(filename)
             tmp = tmp.set_index('year')
         else:
             xprovinces = ['NS', 'NB', 'PE', 'NL']
             for ixprovince,xprovince in enumerate(xprovinces):
                 filename = "{}/{}_Kton_no-pasture-removal.csv".format(data_folder,xprovince)
+                filename = "{}/{}_Kton.csv".format(data_folder2,xprovince)
                 itmp = pd.read_csv(filename)
                 itmp = itmp.set_index('year')
                 if ixprovince == 0:
@@ -143,6 +149,9 @@ if __name__ == '__main__':
                 
         # select only relevant years
         tmp = tmp.loc[ [ ii for ii in census_years ] ]
+
+        # add ag-surplus: manure+fert-(crop+pasture)
+        tmp['ag-surplus'] = tmp['man'] + tmp['fert'] - tmp['crop']
 
         data['TREND'][province] = tmp.copy(deep=True)
 
@@ -163,18 +172,19 @@ if __name__ == '__main__':
         for component in components:
 
             if component == 'crop':
-                # "Crop" and "Residue"
-                tmp[component] = pd.Series(tmp['Crop']+tmp['Residue'], index=tmp.index) * -1.0
+                # Lamisa had: "Crop" and "Residue"
+                # NEW: "Crop" and "Graze"
+                tmp[component] = pd.Series(tmp['Crop']+tmp['Graze']/1000., index=tmp.index) * -1.0
             elif component == 'man':
                 # "Manure" and "Manure.1"/1000
                 tmp[component] = pd.Series(tmp['Manure']+tmp['Manure.1']/1000., index=tmp.index)
             elif component == 'fert':
                 # "Fertilizer"
                 tmp[component] = pd.Series(tmp['Fertilizer'], index=tmp.index)
-            elif component == 'waste':
-                # "Sludge" * 5 since 20% of sludge goes to cropland and 80% to freshwater --> multiply with 5 to get 100% from 20%
-                tmp[component] = pd.Series(tmp['Sludge']*5.0, index=tmp.index)
-            elif component == 'surplus':
+            #elif component == 'waste':
+            #    # "Sludge" * 5 since 20% of sludge goes to cropland and 80% to freshwater --> multiply with 5 to get 100% from 20%
+            #    tmp[component] = pd.Series(tmp['Sludge']*5.0, index=tmp.index)
+            elif component == 'ag-surplus':
                 # "Budget" and "Budget.1"/1000
                 tmp[component] = pd.Series(tmp['Budget']+tmp['Budget.1']/1000., index=tmp.index)
             else:
@@ -223,6 +233,8 @@ if __name__ == '__main__':
                         # collect data in provincial dataframe
                         tmp_prov[component] = tmp
 
+        tmp_prov['ag-surplus'] = tmp_prov ['man'] + tmp_prov ['fert'] - tmp_prov ['crop']
+
         data['IPNI'][province] = tmp_prov
 
 
@@ -231,10 +243,10 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------
 
     # Main plot
-    nrow        = 7           # # of rows of subplots per figure
-    ncol        = 5           # # of columns of subplots per figure
+    nrow        = 6           # # of rows of subplots per figure
+    ncol        = len(components) # # of columns of subplots per figure
     hspace      = 0.04         # x-space between subplots
-    vspace      = 0.04        # y-space between subplots
+    vspace      = 0.03        # y-space between subplots
     right       = 0.9         # right space on page
     textsize    = 6           # standard text size
     dxabc       = 1.0         # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
@@ -344,6 +356,13 @@ if __name__ == '__main__':
     from matplotlib.patches import Rectangle, Circle, Polygon
     from mpl_toolkits.basemap import Basemap
 
+    cc = color.get_brewer('temp_19lev', rgb=True)[2:-1]
+    cc = color.get_brewer('WhiteBlueGreenYellowRed', rgb=True)[20:-1]
+    cmap = mpl.colors.ListedColormap(cc)
+
+    cc2 = [ cc[int(iyy*len(cc)/len(census_years))] for iyy in range(len(census_years)) ]
+    cmap2 = mpl.colors.ListedColormap(cc2)
+
     if (outtype == 'pdf'):
         # pdffile = plotname+'.pdf'
         print('Plot PDF ', pdffile)
@@ -376,6 +395,7 @@ if __name__ == '__main__':
 
             #     [left, bottom, width, height]
             pos = position(nrow,ncol,iplot,hspace=hspace,vspace=vspace)
+            print("pos: {}".format(pos))
         
             sub = fig.add_axes(pos,frameon=True) #, axisbg='none')
 
@@ -397,28 +417,58 @@ if __name__ == '__main__':
             elif component == 'surplus':
                 minval = -52.0
                 maxval = 100.0
+            elif component == 'ag-surplus':
+                minval = -52.0
+                maxval = 100.0
+            else:
+                raise ValueError(' Range for component not known.')
             xvals_all = []
             yvals_all = []
-            for province in provinces:
 
-                xvals  = np.array(data['TREND'][province][component].values)
-                yvals  = np.array(data[source][province][component].values)
+            if component in ['fert', 'man', 'crop', 'ag-surplus']:
+                for province in provinces:
 
-                xvals_all += list(xvals)
-                yvals_all += list(yvals)
+                    for iyy,yy in enumerate(census_years):
 
-                # iminval = min(np.min(xvals),np.min(yvals))
-                # imaxval = max(np.max(xvals),np.max(yvals))
-                # if minval > iminval:
-                #     minval = iminval
-                # if maxval < imaxval:
-                #     maxval = imaxval
+                        # old data
+                        xvals  = np.array(data['TREND'][province][component].values)
+                        yvals  = np.array(data[source][province][component].values)
 
-                sub.plot(xvals, yvals,
-                             linestyle='None',
-                             alpha=0.3,
-                             marker='o', markeredgecolor='0.1', markerfacecolor='k', 
-                             markersize=3.0, markeredgewidth=0.0)
+                        xvals  = np.array([data['TREND'][province][component].loc[yy]])
+                        yvals  = np.array([data[source][province][component].loc[yy]])
+
+                        xvals_all += list(xvals)
+                        yvals_all += list(yvals)
+
+                        icolor = int(iyy*len(cc)/len(census_years))
+                        icolor = iyy
+
+                        sub.plot(xvals, yvals,
+                            linestyle='None',
+                            alpha=1.0,
+                            marker='o', markeredgecolor=cc2[icolor], markerfacecolor=cc2[icolor], #cc[icolor], 
+                            markersize=3.0, markeredgewidth=0.0,
+                            zorder=50)
+
+                    # # new data
+                    # xvals  = np.array(data['TREND'][province][component].values)
+                    # yvals  = np.array(data[source][province][component].values)
+
+                    # xvals  = np.array([ data['TREND'][province][component].loc[yy] for yy in range(2011,2017,5) ])
+                    # yvals  = np.array([ data[source][province][component].loc[yy] for yy in range(2011,2017,5) ])
+
+                    # xvals_all += list(xvals)
+                    # yvals_all += list(yvals)
+
+                    # sub.plot(xvals, yvals,
+                    #              linestyle='None',
+                    #              alpha=0.3,
+                    #              marker='o', markeredgecolor='0.1', markerfacecolor='red', 
+                    #              markersize=3.0, markeredgewidth=0.0)
+
+                print('    {}: [{:5.2f},{:5.2f}]'.format(component,
+                                               np.nanmin([np.nanmin(xvals_all),np.nanmin(yvals_all)]),
+                                               np.nanmax([np.nanmax(xvals_all),np.nanmax(yvals_all)])))
 
             # correlation coefficient
             idx = (~np.isnan(xvals_all) & ~np.isnan(yvals_all) )
@@ -436,7 +486,7 @@ if __name__ == '__main__':
 
             # plot 1-1 line
             if np.any(idx):
-                sub.plot([minval,maxval], [minval,maxval], linestyle='-', linewidth=lwidth*3, color='k')
+                sub.plot([minval,maxval], [minval,maxval], linestyle='-', linewidth=lwidth*3, color='k',zorder=20)
         
             # add label with component name
             sub.text(0.0,1.0,"{}.".format(chr(96+iplot)),
@@ -444,21 +494,21 @@ if __name__ == '__main__':
                              fontweight='bold',
                              fontsize=textsize+2,
                              transform=sub.transAxes)
-            sub.text(0.05,0.95,"{}".format(components[component]['name'].replace('Crop P Removal','Crop P\nRemoval').replace('Livestock Manure','Livestock\nManure').replace('Domestic Waste','Domestic\nWaste')),
+            sub.text(0.05,0.95,"{}".format(components[component]['name'].replace('Pasture P Removal','Pasture P\nRemoval').replace('Livestock Manure','Livestock\nManure').replace('Domestic Waste','Domestic\nWaste').replace('P Surplus','P\nSurplus')),
                              verticalalignment='top',horizontalalignment='left',rotation=0,
                              fontsize=textsize,
                              transform=sub.transAxes)
 
             # Add x-title
-            if iplot == 8:
-                sub.text(0.5,-0.28,"TREND-P-Canada {}".format(unit),
+            if iplot == 6:
+                sub.text(1.1,-0.22,"TREND-P-Canada {}".format(unit),
                              verticalalignment='top',horizontalalignment='center',rotation=0,
                              fontsize=textsize,
                              transform=sub.transAxes)
                 
             # Add y-title
-            if iplot == 1 or iplot == 6:
-                sub.text(-0.5,0.5,"{}\n{}".format(sources[source]['title'],unit),  # first value position is moving right-left
+            if iplot == 1 or iplot == 5:
+                sub.text(-0.35,0.5,"{}\n{}".format(sources[source]['title'],unit),  # first value position is moving right-left
                              rotation=90,
                              fontsize=textsize,
                              verticalalignment='center',horizontalalignment='center',
@@ -475,6 +525,31 @@ if __name__ == '__main__':
 
             sub.set_xlim([minval*0.98,maxval*1.02])
             sub.set_ylim([minval*0.98,maxval*1.02])
+
+
+    # ------------------
+    # colorbar
+    # ------------------
+    pos_col_legend = position(nrow,ncol,iplot,hspace=hspace,vspace=vspace, top=0.076, bottom=0.070)
+
+    # w/o ticklabels  w/o ticks
+    #     [left, bottom, width, height]
+    csub    = fig.add_axes( [0.125+0.1,0.6,0.73625+0.16375-0.125-0.2,0.010] )
+    cbar   = mpl.colorbar.ColorbarBase(csub,
+                                           norm=mpl.colors.Normalize(vmin=census_years[0]-2.5, vmax=census_years[-1]+2.5),
+                                           cmap=cmap2,
+                                           orientation='horizontal',
+                                           alpha=1.0,
+                                           ticks=census_years)
+    cbar.ax.tick_params(labelsize=textsize)
+    cbar.ax.text( 0.5,-1.0,"Census Years", fontsize=textsize, color='black', horizontalalignment='center', verticalalignment='bottom', transform=cbar.ax.transAxes)
+    cbar.ax.set_xticklabels(census_years)
+
+    for yy in census_years:
+        cbar.ax.text(yy,0.45,str(yy), fontsize=textsize, color='black', horizontalalignment='center', verticalalignment='center')#, transform=cbar.ax.transAxes)
+
+    cbar.ax.tick_params(size=0)   # remove ticks
+    cbar.set_ticks([])             # remove ticklabels
 
 
     if (outtype == 'pdf'):
@@ -502,6 +577,20 @@ if __name__ == '__main__':
     t2    = time.time()
     strin = '[m]: '+astr((t2-t1)/60.,1) if (t2-t1)>60. else '[s]: '+str(t2-t1)
     print('Time ', strin)
+
+
+    # for year in census_years:
+    #     MAD = np.nanmedian(np.abs(
+    #         np.array([ [ data['WANG'][pp]['ag-surplus'].loc[year]]  for pp in provinces ]) -
+    #         np.array([ [ data['TREND'][pp]['ag-surplus'].loc[year]] for pp in provinces ]) ))
+    #     print('MAD for year {} of ag-surplus for WANG: {}'.format(year,MAD))
+
+    # for year in census_years:
+    #     MAD = np.nanmedian(np.abs(
+    #         np.array([ [ data['IPNI'][pp]['ag-surplus'].loc[year]]  for pp in provinces ]) -
+    #         np.array([ [ data['TREND'][pp]['ag-surplus'].loc[year]] for pp in provinces ]) ))
+    #     print('MAD for year {} of ag-surplus for IPNI: {}'.format(year,MAD))
+        
 
 
 
