@@ -1,18 +1,6 @@
 Place all files found in the Data Package in the folder with foldername "Figure_4" in here.
 
-(A) The county-scale TREND-P-Canada data aggregated to provincial-scale but not accounting for pasture P removal but only crop P removal: 
-* AB_Kton_no-pasture-removal.csv
-* BC_Kton_no-pasture-removal.csv
-* MB_Kton_no-pasture-removal.csv
-* NB_Kton_no-pasture-removal.csv
-* NL_Kton_no-pasture-removal.csv
-* NS_Kton_no-pasture-removal.csv
-* ON_Kton_no-pasture-removal.csv
-* PE_Kton_no-pasture-removal.csv
-* QC_Kton_no-pasture-removal.csv
-* SK_Kton_no-pasture-removal.csv
-
-(B) Independent provincial-scale validation data: 
+(A) Independent provincial-scale validation data: 
 * IPNI_data.xlsx from IPNI (2014) [1]
 * Wang_Paper_data.xlsx from Wang et al. (2014) [2,3]
 
