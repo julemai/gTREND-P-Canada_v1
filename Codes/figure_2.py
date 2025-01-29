@@ -181,8 +181,9 @@ print("")
 # -------------------------
 # (c) P components of that year
 # -------------------------
-components        = [ 'crop_and_pasture_P_removal', 'fertilizer_P', 'livestock_manure_P', 'domestic_waste_P', 'P_surplus'  ]
-components_lamisa = [ 'CROP',                       'FERT',         'LVSK',               'WASTE',            'Surplus'    ]
+
+components        = [ 'fertilizer_P', 'crop_and_pasture_P_rem.','livestock_manure_P', 'domestic_waste_P', 'P_surplus'  ]
+components_lamisa = [ 'FERT',         'CROP',                      'LVSK',               'WASTE',            'Surplus'    ]
 
 val_components = {}
 minmax_components = {}
@@ -404,7 +405,7 @@ else:
 cc = {}
 
 # green
-cc['crop_and_pasture_P_removal'] = [        (237/256.,248/256.,233/256.),
+cc['crop_and_pasture_P_rem.'] = [        (237/256.,248/256.,233/256.),
                         (199/256.,233/256.,192/256.),
                         (161/256.,217/256.,155/256.),
                         (116/256.,196/256.,118/256.),
@@ -602,6 +603,14 @@ for icomponent,component in enumerate(components):
                      fontsize=textsize2, horizontalalignment="right", verticalalignment="center",transform=sub.transAxes,rotation=90)
 
         print("year = {} component = {} --> ncounty_with_data = {} of {}".format(year,component,ncounty_with_data,nshapes))
+
+
+        # add abc
+        sub.text(0.9,0.65,"{}.".format(chr(96+iplot)),
+                         verticalalignment='bottom',horizontalalignment='left',rotation=0,
+                         fontweight='bold',
+                         fontsize=textsize,
+                         transform=sub.transAxes)
             
 
         # [left, bottom, width, height]
