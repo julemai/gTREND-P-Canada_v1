@@ -25,8 +25,7 @@
 
 
 # This script generates figure 5 of the following publication:
-#      "Long-term pan-Canadian phosphorus mass budget dataset (g)TREND-P-CanadaCANADA: Consistent,
-#      unified county-scale and gridded data products from 1961 to 2021"
+#      "Consistent and unified phosphorus mass budget dataset across Canada from 1961 to 2021: gTREND-P-Canada"
 #      Lamisa Malik, Juliane Mai, Danyka K. Byrnes, Kimberly J. Van Meter, Shuyu Chang, Meghan McLeod, Nandita B. Basu
 #      Under review with Nature Scientific Data. DOI forthcoming.
 
