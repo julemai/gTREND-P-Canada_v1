@@ -2,12 +2,14 @@
 
 # Figures
 Figures/figure_*_*.png
+Figures_v1
 
 # Codes
 Codes/*.R
 Codes/old_versions
 Codes/.RData
 Codes/.Rhistory
+Codes/julie
 
 # Data
 Data/*/.RData
@@ -23,6 +25,10 @@ Data/Figure_3/*.csv
 Data/Figure_4/*.xlsx
 Data/Figure_4/*.csv
 Data/Figure_5/*.csv
+
+Data/Figure_4/old
+Data/Figure_5/Files_from_Lamisa_Feb2025
+Data_v1
 
 
 
