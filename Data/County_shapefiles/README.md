@@ -1,6 +1,8 @@
+# County boundaries
+
 Place all folders found in the Data Package in the folder with foldername "County_shapefiles" in here.
 
-These are:
+These are folders containing county boundary shapefiles for each of the following census years:
 * 1961
 * 1966
 * 1971
