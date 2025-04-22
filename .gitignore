@@ -12,10 +12,12 @@ Codes/.Rhistory
 Codes/julie
 
 # Data
+Data/*.zip
 Data/*/.RData
 Data/*/.Rhistory
 Data/County_shapefiles/[1-2]*
 Data/County_TREND-P-Canada/*.csv
+Data/Gridded_gTREND-P-Canada/*.nc
 Data/Gridded_gTREND-P-Canada/Crop_and_Pasture_P_Removal
 Data/Gridded_gTREND-P-Canada/Domestic_Waste_P
 Data/Gridded_gTREND-P-Canada/Fertilizer_P
